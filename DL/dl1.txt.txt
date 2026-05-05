@@ -1,0 +1,180 @@
+# ==============================
+# Step 1: Import Libraries
+# ==============================
+
+import numpy as np          # For numerical operations (arrays, math)
+import pandas as pd         # For handling dataset (DataFrame)
+import matplotlib.pyplot as plt   # For plotting graphs
+
+from sklearn.model_selection import train_test_split   # To split data into train & test
+from sklearn.preprocessing import StandardScaler       # To normalize data
+
+import tensorflow as tf
+from tensorflow.keras.models import Sequential         # For building neural network
+from tensorflow.keras.layers import Dense, Input       # Dense = fully connected layer
+from tensorflow.keras.callbacks import EarlyStopping   # To stop training early (avoid overfitting)
+
+
+
+# ==============================
+# Step 2: Load Dataset
+# ==============================
+
+df = pd.read_csv("1_boston_housing.csv")  
+# Load Boston housing dataset from CSV file
+
+# Remove unwanted quotes from column names (clean column names)
+df.columns = df.columns.str.replace('"', '')
+
+# Display first 5 rows of dataset
+print(df.head())
+
+
+
+# ==============================
+# Step 3: Split Features & Target
+# ==============================
+
+X = df.drop("MEDV", axis=1)  
+# X = input features (all columns except MEDV)
+
+y = df["MEDV"]              
+# y = target variable (house price)
+
+print("Shape of X:", X.shape)   # Number of rows & features
+print("Shape of y:", y.shape)   # Number of target values
+
+
+
+# ==============================
+# Step 4: Train-Test Split
+# ==============================
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+
+# 80% data → training
+# 20% data → testing
+# random_state ensures same split every time
+
+
+
+# ==============================
+# Step 5: Feature Scaling
+# ==============================
+
+scaler = StandardScaler()
+# Standardize data (mean = 0, std = 1)
+
+X_train = scaler.fit_transform(X_train)
+# Fit scaler on training data and transform it
+
+X_test = scaler.transform(X_test)
+# Only transform test data (no fitting)
+
+
+
+# ==============================
+# Step 6: Build Deep Neural Network
+# ==============================
+
+model = Sequential([
+    Input(shape=(X_train.shape[1],)),  
+    # Input layer with number of features
+
+    Dense(64, activation='relu'),  
+    # Hidden layer 1 (64 neurons, ReLU activation)
+
+    Dense(32, activation='relu'),  
+    # Hidden layer 2 (32 neurons)
+
+    Dense(16, activation='relu'),  
+    # Hidden layer 3 (16 neurons)
+
+    Dense(1, activation='linear')   
+    # Output layer → 1 value (house price)
+])
+
+# Compile the model
+model.compile(
+    optimizer='adam',     # Optimizer (adjusts weights)
+    loss='mse',           # Loss function (Mean Squared Error)
+    metrics=['mae']       # Metric (Mean Absolute Error)
+)
+
+# Display model architecture
+model.summary()
+
+
+
+# ==============================
+# Step 7: Train Model
+# ==============================
+
+early_stop = EarlyStopping(
+    monitor='val_loss',        # Monitor validation loss
+    patience=10,               # Stop if no improvement for 10 epochs
+    restore_best_weights=True  # Restore best model weights
+)
+
+history = model.fit(
+    X_train, y_train,
+    epochs=200,               # Maximum number of iterations
+    batch_size=16,            # Number of samples per batch
+    validation_split=0.2,     # 20% of training used for validation
+    callbacks=[early_stop],   # Apply early stopping
+    verbose=1                 # Show training progress
+)
+
+
+
+# ==============================
+# Step 8: Evaluate Model
+# ==============================
+
+loss, mae = model.evaluate(X_test, y_test)
+# Evaluate model on unseen test data
+
+print("\nTest Loss (MSE):", loss)
+print("Test MAE:", mae)
+
+
+
+# ==============================
+# Step 9: Predictions
+# ==============================
+
+y_pred = model.predict(X_test)
+# Predict house prices for test data
+
+print("\nActual vs Predicted (First 5 values):")
+for i in range(5):
+    print(f"Actual: {y_test.iloc[i]:.2f} | Predicted: {y_pred[i][0]:.2f}")
+    # Compare real vs predicted values
+
+
+
+# ==============================
+# Step 10: Plot Training Graphs
+# ==============================
+
+# Plot Loss Graph
+plt.figure()
+plt.plot(history.history['loss'], label='Training Loss')       # Training loss
+plt.plot(history.history['val_loss'], label='Validation Loss') # Validation loss
+plt.legend()
+plt.title("Loss vs Epochs")
+plt.xlabel("Epochs")
+plt.ylabel("Loss")
+plt.show()
+
+# Plot MAE Graph
+plt.figure()
+plt.plot(history.history['mae'], label='Training MAE')         # Training MAE
+plt.plot(history.history['val_mae'], label='Validation MAE')   # Validation MAE
+plt.legend()
+plt.title("MAE vs Epochs")
+plt.xlabel("Epochs")
+plt.ylabel("MAE")
+plt.show()

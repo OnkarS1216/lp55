@@ -1,0 +1,114 @@
+# =========================
+# 1. IMPORT LIBRARIES
+# =========================
+import numpy as np                     # For numerical operations
+import matplotlib.pyplot as plt        # For plotting graphs (optional visualization)
+
+# Import dataset and CNN-related classes from TensorFlow Keras
+from tensorflow.keras.datasets import fashion_mnist
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense
+
+
+
+# =========================
+# 2. LOAD DATASET
+# =========================
+# Load the Fashion MNIST dataset (60k training + 10k testing images)
+(X_train, y_train), (X_test, y_test) = fashion_mnist.load_data()
+
+
+
+# =========================
+# 3. DATA PREPROCESSING
+# =========================
+
+# Normalize pixel values from range (0–255) → (0–1)
+# This helps faster and stable training
+X_train = X_train / 255.0
+X_test = X_test / 255.0
+
+# Reshape data to add channel dimension (required for CNN)
+# Original shape: (28, 28) → New shape: (28, 28, 1)
+# 1 represents grayscale channel
+X_train = X_train.reshape(-1, 28, 28, 1)
+X_test = X_test.reshape(-1, 28, 28, 1)
+
+
+
+# =========================
+# 4. BUILD CNN MODEL
+# =========================
+
+# Create a Sequential model (layer-by-layer stack)
+model = Sequential()
+
+# First Convolution Layer:
+# - 32 filters of size 3x3
+# - ReLU activation introduces non-linearity
+# - Input shape = (28, 28, 1)
+model.add(Conv2D(32, (3,3), activation='relu', input_shape=(28,28,1)))
+
+# MaxPooling Layer:
+# - Reduces spatial size (downsampling)
+# - Keeps important features
+model.add(MaxPooling2D(2,2))
+
+# Second Convolution Layer:
+# - 64 filters → capture more complex features
+model.add(Conv2D(64, (3,3), activation='relu'))
+
+# Second MaxPooling Layer
+model.add(MaxPooling2D(2,2))
+
+# Flatten Layer:
+# - Converts 2D feature maps into 1D vector
+# - Required before feeding into Dense layer
+model.add(Flatten())
+
+# Fully Connected Layer:
+# - 128 neurons
+# - Learns high-level features
+model.add(Dense(128, activation='relu'))
+
+# Output Layer:
+# - 10 neurons (for 10 classes)
+# - Softmax gives probability distribution
+model.add(Dense(10, activation='softmax'))
+
+
+
+# =========================
+# 5. COMPILE MODEL
+# =========================
+
+# Compile the model:
+# - optimizer='adam' → adaptive learning algorithm
+# - loss='sparse_categorical_crossentropy' → for multi-class classification
+# - metrics=['accuracy'] → track accuracy
+model.compile(optimizer='adam',
+              loss='sparse_categorical_crossentropy',
+              metrics=['accuracy'])
+
+
+
+# =========================
+# 6. TRAIN MODEL
+# =========================
+
+# Train the model:
+# - epochs=5 → model will train 5 times on entire dataset
+# - validation_data → used to check performance during training
+model.fit(X_train, y_train, epochs=5, validation_data=(X_test, y_test))
+
+
+
+# =========================
+# 7. EVALUATE MODEL
+# =========================
+
+# Evaluate model performance on test dataset
+loss, accuracy = model.evaluate(X_test, y_test)
+
+# Print final accuracy
+print("Test Accuracy:", accuracy)
