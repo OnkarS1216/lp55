@@ -1,0 +1,497 @@
+HPC KNN OpenMP Viva Questions & Answers
+1. What is KNN?
+
+Answer:
+KNN (K-Nearest Neighbors) is a supervised machine learning algorithm used for classification and regression. It classifies a data point based on the majority class of its nearest neighbors.
+
+2. Why is KNN called a lazy learner?
+
+Answer:
+Because it does not train a model beforehand. It stores the dataset and performs computation only during prediction time.
+
+3. What is HPC?
+
+Answer:
+HPC stands for High Performance Computing. It uses parallel processing and multiple computing resources to solve complex problems faster.
+
+4. How is HPC used in this program?
+
+Answer:
+OpenMP is used to parallelize distance calculation and voting operations, improving execution speed.
+
+5. What is OpenMP?
+
+Answer:
+OpenMP is an API for parallel programming in C, C++, and Fortran. It allows multiple threads to execute code simultaneously.
+
+6. Why do we include omp.h?
+
+Answer:
+omp.h provides OpenMP functions and directives required for parallel execution.
+
+7. What is the purpose of #pragma omp parallel for?
+
+Answer:
+It divides loop iterations among multiple threads so they execute in parallel.
+
+8. What are threads?
+
+Answer:
+Threads are lightweight execution units that run parts of a program concurrently.
+
+9. What is Euclidean Distance?
+
+Answer:
+It is the straight-line distance between two points.
+
+Formula:
+
+d=
+(x
+1
+	​
+
+−x
+2
+	​
+
+)
+2
++(y
+1
+	​
+
+−y
+2
+	​
+
+)
+2
+	​
+
+-10
+-8
+-6
+-4
+-2
+2
+4
+6
+8
+10
+-10
+-5
+5
+10
+A(6.0, 6.0)
+B(-6.0, -6.0)
+d = 16.97
+Delta x = 12
+Delta y = 12
+10. Why is Euclidean distance used in KNN?
+
+Answer:
+It measures similarity between data points. Smaller distance means higher similarity.
+
+11. What does the Point structure store?
+
+Answer:
+It stores x-coordinate, y-coordinate, and class label of each data point.
+
+12. Why is vector used?
+
+Answer:
+vector is a dynamic array used to store dataset points efficiently.
+
+13. What is stored in vector<pair<double,int>> dist?
+
+Answer:
+It stores distance and corresponding class label.
+
+14. Why are distances sorted?
+
+Answer:
+Sorting helps identify the nearest neighbors quickly.
+
+15. What is the role of K in KNN?
+
+Answer:
+K represents the number of nearest neighbors considered for classification.
+
+16. What happens if K is very small?
+
+Answer:
+The model becomes sensitive to noise and may overfit.
+
+17. What happens if K is very large?
+
+Answer:
+The model may underfit and reduce accuracy.
+
+18. Why is K = 3 used here?
+
+Answer:
+It provides balanced classification and avoids ties.
+
+19. What is majority voting?
+
+Answer:
+The class with maximum neighbor votes becomes the predicted class.
+
+20. What does this line do?
+return (count1 > count0) ? 1 : 0;
+
+Answer:
+It returns the class with higher vote count using a ternary operator.
+
+21. What is reduction in OpenMP?
+
+Answer:
+Reduction combines results from multiple threads safely into a single variable.
+
+22. Why is reduction used in voting?
+
+Answer:
+To avoid race conditions while multiple threads update counters simultaneously.
+
+23. What is a race condition?
+
+Answer:
+It occurs when multiple threads access and modify shared data at the same time incorrectly.
+
+24. What is supervised learning?
+
+Answer:
+It is machine learning where the model learns using labeled training data.
+
+25. Is KNN supervised or unsupervised?
+
+Answer:
+KNN is a supervised learning algorithm.
+
+26. What is classification?
+
+Answer:
+Classification predicts discrete categories or class labels.
+
+27. What are the classes in this program?
+
+Answer:
+Class 0 and Class 1.
+
+28. What is the query point?
+
+Answer:
+The query point is the unknown data point whose class must be predicted.
+
+29. What is the query point in this code?
+
+Answer:
+The query point is (5,5).
+
+30. Why is output class 1?
+
+Answer:
+Because the nearest three neighbors belong to class 1.
+
+31. What is the time complexity of KNN?
+
+Answer:
+Time complexity is approximately O(n log n) due to distance calculation and sorting.
+
+32. Which headers are used in this program?
+
+Answer:
+
+iostream → input/output
+vector → dynamic arrays
+cmath → mathematical functions
+algorithm → sorting
+omp.h → OpenMP parallelism
+
+33. What does sort(dist.begin(), dist.end()) do?
+
+Answer:
+It sorts distances in ascending order.
+
+34. What compiler command is used?
+
+Answer:
+
+g++ -fopenmp knn.cpp -o knn
+
+35. Why is -fopenmp necessary?
+
+Answer:
+It enables OpenMP support during compilation.
+
+36. What happens without -fopenmp?
+
+Answer:
+Parallel directives are ignored and program runs sequentially.
+
+37. How do you run the program?
+
+Answer:
+
+./knn
+38. How can you set number of threads?
+
+Answer:
+Using:
+
+export OMP_NUM_THREADS=4
+39. What are advantages of parallel computing?
+
+Answer:
+
+Faster execution
+Better CPU utilization
+Improved performance
+Reduced computation time
+40. Give a final viva explanation of this project.
+
+Answer:
+“This project implements K-Nearest Neighbors classification using OpenMP parallel programming. Distances between query and dataset points are computed in parallel, sorted, and majority voting is used for classification. This demonstrates HPC concepts in AI/ML.”
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Important Viva Questions with Answers (Most Asked)
+
+Based on your HPC KNN OpenMP practical, these are the most important viva questions likely to be asked by the examiner.
+
+1. What is KNN?
+
+Answer:
+KNN (K-Nearest Neighbors) is a supervised machine learning algorithm used for classification. It predicts the class of a query point based on the majority class of nearest neighbors.
+
+2. Why is KNN called a lazy learning algorithm?
+
+Answer:
+Because it does not train a model in advance. It stores the dataset and performs computation only during prediction.
+
+3. What is HPC?
+
+Answer:
+HPC stands for High Performance Computing. It uses parallel processing to solve problems faster and improve performance.
+
+4. How is HPC used in this project?
+
+Answer:
+HPC is used through OpenMP parallelization for:
+
+Distance calculation
+Majority voting
+
+This reduces execution time.
+
+5. What is OpenMP?
+
+Answer:
+OpenMP is an API used for parallel programming in C/C++. It allows multiple threads to execute tasks simultaneously.
+
+6. Why do we use #pragma omp parallel for?
+
+Answer:
+It parallelizes the loop by dividing iterations among multiple threads.
+
+7. What is Euclidean Distance?
+
+Answer:
+Euclidean distance measures the straight-line distance between two points.
+
+Formula:
+
+d=
+(x
+1
+	​
+
+−x
+2
+	​
+
+)
+2
++(y
+1
+	​
+
+−y
+2
+	​
+
+)
+2
+	​
+
+-10
+-8
+-6
+-4
+-2
+2
+4
+6
+8
+10
+-10
+-5
+5
+10
+A(6.0, 6.0)
+B(-6.0, -6.0)
+d = 16.97
+Delta x = 12
+Delta y = 12
+8. Why is Euclidean distance used in KNN?
+
+Answer:
+Because it measures similarity between points. Smaller distance means points are more similar.
+
+9. What is the role of K in KNN?
+
+Answer:
+K represents the number of nearest neighbors used for classification.
+
+10. Why is K = 3 used?
+
+Answer:
+K = 3 helps avoid tie situations and gives balanced classification.
+
+11. What happens if K is too small?
+
+Answer:
+The model becomes sensitive to noise and may overfit.
+
+12. What happens if K is too large?
+
+Answer:
+The model may underfit and reduce accuracy.
+
+13. What is majority voting?
+
+Answer:
+The class with the highest number of neighbor votes becomes the predicted class.
+
+14. Why are distances sorted?
+
+Answer:
+To identify the nearest neighbors easily.
+
+15. What does this line do?
+sort(dist.begin(), dist.end());
+
+Answer:
+It sorts all distances in ascending order.
+
+16. What is stored in dist vector?
+
+Answer:
+It stores:
+
+Distance
+Corresponding class label
+17. What is the query point?
+
+Answer:
+The unknown point whose class needs to be predicted.
+
+In this code:
+
+Point query = {5,5,-1};
+18. Why is the output class 1?
+
+Answer:
+Because the 3 nearest neighbors belong to class 1.
+
+19. What is reduction in OpenMP?
+
+Answer:
+Reduction safely combines results from multiple threads into one variable.
+
+20. Why is reduction used in this code?
+
+Answer:
+To safely count votes without race conditions.
+
+21. What is a race condition?
+
+Answer:
+It occurs when multiple threads modify shared data simultaneously and produce incorrect results.
+
+22. What is supervised learning?
+
+Answer:
+Learning using labeled training data is called supervised learning.
+
+23. Is KNN supervised or unsupervised?
+
+Answer:
+KNN is a supervised learning algorithm.
+
+24. What are the advantages of OpenMP?
+
+Answer:
+
+Easy parallel programming
+Faster execution
+Better CPU utilization
+Reduced computation time
+25. What compiler command is used?
+
+Answer:
+
+g++ -fopenmp knn.cpp -o knn
+
+-fopenmp enables OpenMP support.
+
+26. What happens if -fopenmp is not used?
+
+Answer:
+Parallel directives are ignored and the program runs sequentially.
+
+27. How do you run the program?
+
+Answer:
+
+./knn
+28. What are the headers used?
+
+Answer:
+
+iostream → input/output
+vector → dataset storage
+cmath → sqrt()
+algorithm → sorting
+omp.h → parallel programming
+
+29. What is the time complexity of KNN?
+
+Answer:
+Approximately O(n log n) because of distance calculation and sorting.
+
+30. Give final viva explanation of the project.
+
+Answer:
+“This project implements KNN classification using OpenMP parallel programming. Distances are computed in parallel, nearest neighbors are selected after sorting, and majority voting predicts the final class. This demonstrates HPC concepts in AI/ML.”
